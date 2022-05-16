@@ -77,3 +77,52 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "mastodon.postgresql.fullname" -}}
 {{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Mastodon secret env: Use generated secret name or user-defined one
+*/}}
+{{- define "mastodon.secretName" -}}
+{{- if (empty .Values.mastodon.secrets.existingSecret) -}}
+{{ template "mastodon.fullname" . }}
+{{- else }}
+{{ .Values.mastodon.secrets.existingSecret }}
+{{- end }}
+{{- end }}
+
+{{/*
+PostgreSQL: Use generated secret name or user-defined one
+*/}}
+{{- define "mastodon.postgresql.secretName" -}}
+{{- if not (empty .Values.postgresql.auth.existingSecret) -}}
+{{ .Values.postgresql.auth.existingSecret }}
+{{- else if .Values.postgresql.enabled }}
+{{ .Release.Name }}-postgresql
+{{- else }}
+{{ template "mastodon.fullname" . }}
+{{- end }}
+{{- end }}
+
+{{/*
+PostgreSQL: Use default secret key for password or user-defined one
+*/}}
+{{- define "mastodon.postgresql.secretKey" -}}
+{{- default "postgresql-password" .Values.postgresql.postgresqlExistingSecretPasswordKey }}
+{{- end }}
+
+{{/*
+Redis: Use generated secret name or user-defined one
+*/}}
+{{- define "mastodon.redis.secretName" -}}
+{{- if not (empty .Values.redis.auth.existingSecret) -}}
+{{ .Values.redis.auth.existingSecret }}
+{{- else }}
+{{ .Release.Name }}-redis
+{{- end }}
+{{- end }}
+
+{{/*
+Redis: Use default secret key for password or user-defined one
+*/}}
+{{- define "mastodon.redis.secretKey" -}}
+{{- default "redis-password" .Values.redis.auth.existingSecretPasswordKey }}
+{{- end }}

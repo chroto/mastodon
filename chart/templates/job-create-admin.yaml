@@ -56,22 +56,18 @@ spec:
             - configMapRef:
                 name: {{ include "mastodon.fullname" . }}-env
             - secretRef:
-                name: {{ template "mastodon.fullname" . }}
+                name: {{ template "mastodon.secretName" . }}
           env:
             - name: "DB_PASS"
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.postgresql.enabled }}
-                  name: {{ .Release.Name }}-postgresql
-                  {{- else }}
-                  name: {{ template "mastodon.fullname" . }}
-                  {{- end }}
-                  key: postgresql-password
+                  name: {{ template "mastodon.postgresql.secretName" . }}
+                  key: {{ template "mastodon.postgresql.secretKey" . }}
             - name: "REDIS_PASSWORD"
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-redis
-                  key: redis-password
+                  name: {{ template "mastodon.redis.secretName" . }}
+                  key: {{ template "mastodon.redis.secretKey" . }}
             - name: "PORT"
               value: {{ .Values.mastodon.web.port | quote }}
           {{- if (not .Values.mastodon.s3.enabled) }}
