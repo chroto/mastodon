@@ -89,6 +89,14 @@ Mastodon secret env: Use generated secret name or user-defined one
 {{- end -}}
 {{- end -}}
 
+
+{{/*
+PostgreSQL: Use default secret key for password or user-defined one
+*/}}
+{{- define "mastodon.postgresql.secretKey" -}}
+foo
+{{- end -}}
+
 {{/*
 PostgreSQL: Use generated secret name or user-defined one
 */}}
@@ -102,12 +110,6 @@ PostgreSQL: Use generated secret name or user-defined one
 {{- end -}}
 {{- end -}}
 
-{{/*
-PostgreSQL: Use default secret key for password or user-defined one
-*/}}
-{{- define "mastodon.postgresql.secretKey" -}}
-{{- default "postgresql-password" .Values.postgresql.postgresqlExistingSecretPasswordKey -}}
-{{- end -}}
 
 {{/*
 Redis: Use generated secret name or user-defined one
