@@ -84,10 +84,10 @@ Mastodon secret env: Use generated secret name or user-defined one
 {{- define "mastodon.secretName" -}}
 {{- if (empty .Values.mastodon.secrets.existingSecret) -}}
 {{ template "mastodon.fullname" . }}
-{{- else }}
+{{- else -}}
 {{ .Values.mastodon.secrets.existingSecret }}
-{{- end }}
-{{- end }}
+{{- end -}}
+{{- end -}}
 
 {{/*
 PostgreSQL: Use generated secret name or user-defined one
@@ -95,19 +95,19 @@ PostgreSQL: Use generated secret name or user-defined one
 {{- define "mastodon.postgresql.secretName" -}}
 {{- if not (empty .Values.postgresql.auth.existingSecret) -}}
 {{ .Values.postgresql.auth.existingSecret }}
-{{- else if .Values.postgresql.enabled }}
+{{- else if .Values.postgresql.enabled -}}
 {{ .Release.Name }}-postgresql
-{{- else }}
+{{- else -}}
 {{ template "mastodon.fullname" . }}
-{{- end }}
-{{- end }}
+{{- end -}}
+{{- end -}}
 
 {{/*
 PostgreSQL: Use default secret key for password or user-defined one
 */}}
 {{- define "mastodon.postgresql.secretKey" -}}
-{{- default "postgresql-password" .Values.postgresql.postgresqlExistingSecretPasswordKey }}
-{{- end }}
+{{- default "postgresql-password" .Values.postgresql.postgresqlExistingSecretPasswordKey -}}
+{{- end -}}
 
 {{/*
 Redis: Use generated secret name or user-defined one
@@ -115,14 +115,14 @@ Redis: Use generated secret name or user-defined one
 {{- define "mastodon.redis.secretName" -}}
 {{- if not (empty .Values.redis.auth.existingSecret) -}}
 {{ .Values.redis.auth.existingSecret }}
-{{- else }}
+{{- else -}}
 {{ .Release.Name }}-redis
-{{- end }}
-{{- end }}
+{{- end -}}
+{{- end -}}
 
 {{/*
 Redis: Use default secret key for password or user-defined one
 */}}
 {{- define "mastodon.redis.secretKey" -}}
-{{- default "redis-password" .Values.redis.auth.existingSecretPasswordKey }}
-{{- end }}
+{{- default "redis-password" .Values.redis.auth.existingSecretPasswordKey -}}
+{{- end -}}
